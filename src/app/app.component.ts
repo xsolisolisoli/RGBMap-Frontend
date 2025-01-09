@@ -32,7 +32,12 @@ export class AppComponent implements OnInit {
         return [rgb.r, rgb.g, rgb.b];
       });
 
-      const clusters = kmeans(rgbValues, 5, { initialization: 'kmeans++', maxIterations: 1000 }); // Adjust the number of clusters and options as needed
+      const clusters = kmeans(rgbValues, 10, { initialization: 'kmeans++', maxIterations: 1000 }); // Increase the number of clusters
+
+      const clusterColors = [
+        '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', 
+        '#00FFFF', '#800000', '#008000', '#000080', '#808000'
+      ]; // Define distinct colors for clusters
 
       const nodes = this.colors.map((color, index) => {
         const rgb = this.hexToRgb(color);
@@ -42,7 +47,7 @@ export class AppComponent implements OnInit {
           y: rgb.g,
           z: rgb.b,
           name: color,
-          color: color,
+          color: clusterColors[clusters.clusters[index] % clusterColors.length], // Assign cluster color
           cluster: clusters.clusters[index]
         } as unknown as CustomNodeObject;
       });
